@@ -27,8 +27,7 @@ if [ -z $currentWord ]; then
     exit
 fi
 
-currentWord=""
-while [ $numChances -gt 0 -a ! -z `echo $currentWord | tr -d '[:upper:]'` ]; do
+while [[ $numChances -gt 0 ]] && [[ -n `echo "$currentWord" | tr -d '[:upper:]'` ]]; do
     read letterGuess 
     fillGuess $letterGuess
     printCurrentWord
@@ -36,8 +35,8 @@ while [ $numChances -gt 0 -a ! -z `echo $currentWord | tr -d '[:upper:]'` ]; do
     echo $numChances
 done
 
-if [ $numChances -gt -1 ]; then
+if [ $numChances -gt 0 ]; then
     echo "You win! :)"
 else
-    echo ":("
+    echo "Better luck next time :("
 fi
