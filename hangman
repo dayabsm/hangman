@@ -1,0 +1,43 @@
+#!/bin/bash
+
+currentWord=$1
+numChances=$(($2 > ${#currentWord} ? $2 : ${#currentWord}))
+
+printCurrentWord ()
+{
+    clear
+    wordToPrint=`echo "$currentWord" | tr '[:lower:]' '_'`
+    wordToPrint=`echo $wordToPrint | sed 's/\(.\)/\1 /g'`
+    echo "$wordToPrint"
+}
+
+fillGuess ()
+{
+    letterGuess=$1
+    upperCaseGuess=`echo $letterGuess | tr '[:lower:]' '[:upper:]'`
+    currentWord=`echo "$currentWord" | sed "s/$letterGuess/$upperCaseGuess/"`
+}
+
+clear
+echo "Time to play hangman!"
+currentWord=`echo "$currentWord" | tr '[:upper:]' '[:lower:]'`
+
+if [ -z $currentWord ]; then
+    echo "Please retry with a word!"
+    exit
+fi
+
+currentWord=""
+while [ $numChances -gt 0 -a ! -z `echo $currentWord | tr -d '[:upper:]'` ]; do
+    read letterGuess 
+    fillGuess $letterGuess
+    printCurrentWord
+    numChances=$((numChances - 1))
+    echo $numChances
+done
+
+if [ $numChances -gt -1 ]; then
+    echo "You win! :)"
+else
+    echo ":("
+fi
